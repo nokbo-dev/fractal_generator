@@ -1,4 +1,3 @@
-# -*- coding: utf-8 -*-
 import matplotlib.pyplot as plt
 import numpy as np
 
@@ -10,22 +9,13 @@ def mandelbrot(c, maxiter):
         n += 1
     return n
 
-width, height = 500, 500
-maxiter = 255
+x_min, x_max = -2, 1
+y_min, y_max = -1.5, 1.5
+x, y = np.mgrid[x_min:x_max:0.005, y_min:y_max:0.005]
+c = x + 1j*y
 
-real = np.linspace(-2, 1, width)
-imag = np.linspace(-1.5, 1.5, height)
+mandelbrot_set = np.array([mandelbrot(c, 255) for c in c.flatten()]).reshape(x.shape)
 
-mandelbrot_set = np.zeros((height, width))
-
-for row in range(height):
-    for col in range(width):
-        c = complex(real[col], imag[row])
-        mandelbrot_set[row, col] = mandelbrot(c, maxiter)
-
-plt.imshow(mandelbrot_set, extent=[-2, 1, -1.5, 1.5], cmap='hot')
-plt.title('Множество Мандельброта')
-plt.xlabel('Re(c)')
-plt.ylabel('Im(c)')
+plt.imshow(mandelbrot_set, extent=(x_min, x_max, y_min, y_max), cmap='hot')
 plt.savefig('ide/fractal_generator/mandelbrot.png')
-plt.show()
+
